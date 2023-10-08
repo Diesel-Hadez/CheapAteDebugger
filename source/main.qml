@@ -1,15 +1,33 @@
-import QtQuick 2.6
+import QtQuick 2.15
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.15
 import com.kdab.dockwidgets 2.0 as KDDW
 
 ApplicationWindow {
-  visible: true
+  id: root
+  // For demonstration purpose.
+  // Will move elsewhere later.
+  property int program_counter: 0
+
   width: 1000
   height: 800
 
   KDDW.LayoutSaver {
       id: layoutSaver
+  }
+
+  Shortcut {
+    // TO-DO: Differentiate Step Into and Step Over
+    sequences: ["F10", "F11"]
+    onActivated: {
+      root.step_forward();
+    }
+  }
+  Shortcut {
+    sequences: ["Shift+F10", "Shift+F11"]
+    onActivated: {
+      root.step_backward();
+    }
   }
 
   menuBar: MenuBar {
@@ -37,6 +55,9 @@ ApplicationWindow {
       }
       Action {
         text: qsTr("Step")
+        onTriggered: {
+         root.step_forward();
+        }
       }
       Action {
         text: qsTr("Break")
@@ -60,6 +81,18 @@ ApplicationWindow {
       ToolButton {
         text: qsTr("⏹")
       }
+      ToolButton {
+        text: qsTr("⏩")
+        onClicked: {
+          root.step_forward();
+        }
+      }
+      ToolButton {
+        text: qsTr("⏪")
+        onClicked: {
+          root.step_backward();
+        }
+      }
     }
   }
 
@@ -68,10 +101,8 @@ ApplicationWindow {
       anchors.fill: parent
       uniqueName: "MyMainLayout"
 
-      KDDW.DockWidget {
+      DisassemblyDock {
         id: disassemblyDock
-        uniqueName: "disassemblyDock"
-        source: "qrc:/DisassemblyDock.qml"
         onIsFocusedChanged: {
           console.log("Focus changed to DisassemblyDock!");
         }
@@ -110,5 +141,14 @@ ApplicationWindow {
           addDockWidget(commandInputDock, KDDW.KDDockWidgets.Location_OnBottom)
           layoutSaver.restoreFromFile("mySavedLayout.json");
       }
+    }
+
+    function step_forward() {
+      root.program_counter += 1;
+      disassemblyDock.jumpToAddress(root.program_counter);
+    }
+    function step_backward() {
+      root.program_counter -= 1;
+      disassemblyDock.jumpToAddress(root.program_counter);
     }
 }
