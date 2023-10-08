@@ -20,27 +20,30 @@ Item {
         color: "red"
         anchors.fill: parent
       }
-      TextArea {
-        id: commandOutputView
-        // On some platform (e.g: Mobile)
-        // this might break some things, like how it's
-        // supposed to be like inside a Flickable.
-        // But here, it should be fine.
-        selectByMouse: true
-        font.family: "FiraCode Nerd Font"
-        readOnly: true
-        background: Rectangle {
-          color: "white"
-          border.color: commandOutputView.enabled 
-          ? "#21be2b" : "transparent"
-        }
-        placeholderText: "Command Outputs will be shown here"
+      ScrollView {
+        id: commandOutputScrollView
         anchors {
           top: parent.top
           left: parent.left
           right: parent.right
           bottom: commandInputView.top
           margins: 5
+        }
+        TextArea {
+          id: commandOutputView
+          // On some platform (e.g: Mobile)
+          // this might break some things, like how it's
+          // supposed to be like inside a Flickable.
+          // But here, it should be fine.
+          selectByMouse: true
+          font.family: "FiraCode Nerd Font"
+          readOnly: true
+          background: Rectangle {
+            color: "white"
+            border.color: commandOutputView.enabled 
+            ? "#21be2b" : "transparent"
+          }
+          placeholderText: "Command Outputs will be shown here"
         }
       }
       TextField {
@@ -60,8 +63,10 @@ Item {
         }
 
         onAccepted: {
-          root.commandEntered(commandInputView.text);
+          let command = commandInputView.text
           commandInputView.text = "";
+          commandOutputView.text += ">> " + command + "\n";
+          root.commandEntered(command);
         }
       }
       Component.onCompleted: {
@@ -72,5 +77,7 @@ Item {
 
   function addOutput(output) {
     commandOutputView.text += output + "\n";
+    // Scroll to bottom
+    commandOutputScrollView.ScrollBar.vertical.position = 1.0 - commandOutputScrollView.ScrollBar.vertical.size;
   }
 }

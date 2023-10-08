@@ -86,6 +86,10 @@ ApplicationWindow {
             "A Chip8 Emulator/Debugger developed by\n"+
             "           Diesel-Hadez               \n");
           }
+          else {
+            commandInputDock.addOutput(""+
+            "Command \"" + command + "\" not found!\n")
+          }
         }
         onIsFocusedChanged: {
           console.log("Focus changed to CommandInputDock!");
