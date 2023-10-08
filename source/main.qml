@@ -8,6 +8,11 @@ ApplicationWindow {
   // For demonstration purpose.
   // Will move elsewhere later.
   property int program_counter: 0
+  Binding {
+    target: disassemblyDock
+    property: "program_counter"
+    value: root.program_counter
+  }
 
   width: 1000
   height: 800
@@ -145,10 +150,8 @@ ApplicationWindow {
 
     function step_forward() {
       root.program_counter += 1;
-      disassemblyDock.jumpToAddress(root.program_counter);
     }
     function step_backward() {
-      root.program_counter -= 1;
-      disassemblyDock.jumpToAddress(root.program_counter);
+      root.program_counter -= root.program_counter > 0 ? 1 : 0;
     }
 }

@@ -6,6 +6,7 @@ import com.kdab.dockwidgets 2.0 as KDDW
 Item {
   id: root
   signal isFocusedChanged()
+  property alias program_counter: disassemblyLv.currentIndex
 
   ListModel {
     id: mockDisassemblyCode
@@ -57,6 +58,7 @@ Item {
       anchors.fill: parent
       ListView {
         id: disassemblyLv
+        contentY: pc * currentItem.height
         clip: true
         anchors.fill: parent
         anchors.margins: 5
@@ -70,12 +72,6 @@ Item {
     }
     Component.onCompleted: {
      disassemblyDock.isFocusedChanged.connect(root.isFocusedChanged); 
-     root.jumpToAddress(6);
     }
-  }
-
-  function jumpToAddress(pc) {
-    disassemblyLv.contentY = pc * disassemblyLv.currentItem.height;
-    disassemblyLv.currentIndex = pc;
   }
 }
