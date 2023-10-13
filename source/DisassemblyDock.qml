@@ -58,7 +58,7 @@ Item {
       anchors.fill: parent
       ListView {
         id: disassemblyLv
-        contentY: pc * currentItem.height
+        contentY: program_counter * currentItem.height
         clip: true
         anchors.fill: parent
         anchors.margins: 5
