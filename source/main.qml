@@ -131,13 +131,8 @@ ApplicationWindow {
           console.log("Focus changed to CommandInputDock!");
         }
       }
-      KDDW.DockWidget {
+      EmulatedScreenDock {
         id: emulatedScreenDock
-        uniqueName: "emulatedScreenDock"
-        source: "qrc:/EmulatedScreenDock.qml"
-        onIsFocusedChanged: {
-          console.log("Focus changed to EmulatedScreenDock!");
-        }
       }
       Component.onCompleted: {
           console.log("Starting CheapAteDebugger...");
