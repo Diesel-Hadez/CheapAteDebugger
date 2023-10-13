@@ -40,6 +40,7 @@ Item {
   Component {
     id: assemblyLineDelegate
     RowLayout {
+      id: rl
       Text {
         text: "0x" + address.toString(16).toUpperCase()
         font.pixelSize: 12
@@ -55,19 +56,27 @@ Item {
     id: disassemblyDock
     uniqueName: "disassemblyDock"
     Item {
+      id: disassemblyItem
       anchors.fill: parent
       ListView {
         id: disassemblyLv
-        contentY: program_counter * currentItem.height
         clip: true
         anchors.fill: parent
         anchors.margins: 5
         model: mockDisassemblyCode
-        delegate: assemblyLineDelegate
+        preferredHighlightBegin: currentItem.height * 2
+        preferredHighlightEnd: parent.height - 
+            (currentItem.height * 2) - 
+            anchors.margins
+        highlightRangeMode: ListView.ApplyRange
         highlight: Rectangle {
-          width: disassemblyLv.width
+          anchors {
+            left: parent.left
+            right: parent.right
+          }
           color: "lightgray"
         }
+        delegate: assemblyLineDelegate
       }
     }
     Component.onCompleted: {
