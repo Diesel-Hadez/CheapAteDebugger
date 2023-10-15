@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.15
 import com.kdab.dockwidgets 2.0 as KDDW
+import my.b1te.cheapate 1.0
 
 ApplicationWindow {
   id: root
@@ -140,6 +141,13 @@ ApplicationWindow {
           addDockWidget(emulatedScreenDock, KDDW.KDDockWidgets.Location_OnRight)
           addDockWidget(commandInputDock, KDDW.KDDockWidgets.Location_OnBottom)
           layoutSaver.restoreFromFile("mySavedLayout.json");
+      }
+    }
+
+    Chip8Backend {
+      screenDisplay: emulatedScreenDock.chip8Display
+      Component.onCompleted: () => {
+        Run();
       }
     }
 

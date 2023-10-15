@@ -50,6 +50,8 @@ target_compile_features(CheapAteDebugger_lib PUBLIC cxx_std_17)
 
 add_executable(CheapAteDebugger_exe 
     source/main.cpp 
+    source/Chip8Backend.hpp
+    source/Chip8Backend.cpp
     source/Chip8Display.hpp
     source/Chip8Display.cpp
     source/resources.qrc)

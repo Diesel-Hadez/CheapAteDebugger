@@ -14,6 +14,7 @@
 #include <QQmlApplicationEngine>
 
 #include "Chip8Display.hpp"
+#include "Chip8Backend.hpp"
 #include "lib.hpp"
 
 auto main(int argc, char* argv[]) -> int
@@ -25,6 +26,7 @@ auto main(int argc, char* argv[]) -> int
     QGuiApplication::setAttribute(Qt::AA_UseOpenGLES);
 #endif
   qmlRegisterType<Chip8Display>("my.b1te.cheapate",1,0,"Chip8Display");
+  qmlRegisterType<Chip8Backend>("my.b1te.cheapate",1,0,"Chip8Backend");
     QGuiApplication app(argc, argv);
     KDDockWidgets::initFrontend(KDDockWidgets::FrontendType::QtQuick);
 
