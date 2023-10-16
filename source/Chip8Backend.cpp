@@ -11,12 +11,19 @@ void Chip8Backend::Run() {
                    this, [&disp = this->m_Chip8Display](){disp->update();},
                    Qt::DirectConnection);
   m_EmulatorThread = std::make_unique<std::thread>([&](){
-    while (true) {
+    auto cur_x = 0;
+    auto cur_y = 0;
+    while (!m_QuitThread) {
+      if (cur_x == Chip8Display::WIDTH) {
+        cur_x = 0;
+        cur_y++;
+      }
       int r = QRandomGenerator::global()->bounded(0, 255);
       int g = QRandomGenerator::global()->bounded(0, 255);
       int b = QRandomGenerator::global()->bounded(0, 255);
-      m_Chip8Display->SetPenColor(QColor::fromRgb(r,g,b));
-      qDebug() << "Set Pen Color\n";
+      m_Chip8Display->SetPixel(cur_x, cur_y,QColor::fromRgb(r,g,b));
+
+      cur_x++;
       using namespace std::chrono_literals;
       std::this_thread::sleep_for(1000ms);
     }
@@ -24,7 +31,8 @@ void Chip8Backend::Run() {
 }
 Chip8Backend::Chip8Backend(QObject* parent) : 
   QObject(parent),
-  m_EmulatorThread(nullptr)
+  m_EmulatorThread(nullptr),
+  m_QuitThread(false)
 {
 
 }

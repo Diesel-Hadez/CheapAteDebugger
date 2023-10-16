@@ -12,10 +12,12 @@ class Chip8Backend : public QObject {
   Q_PROPERTY(Chip8Display* screenDisplay READ screenDisplay WRITE setScreenDisplay)
 private:
   ThreadPtr m_EmulatorThread;
+  bool m_QuitThread;
 public:
   Chip8Backend(QObject* parent=nullptr);
   ~Chip8Backend() {
     if (m_EmulatorThread) {
+      m_QuitThread = true;
       m_EmulatorThread->join();
     }
   }
