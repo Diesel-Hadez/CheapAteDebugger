@@ -2,6 +2,7 @@
 #include <qcolor.h>
 #include <qpainter.h>
 
+#include <cmath>
 #include <utility>
 
 Chip8Display::Chip8Display(QQuickItem* parent)
@@ -38,15 +39,17 @@ void Chip8Display::paint(QPainter* painter)  {
   QPen pen(QColorConstants::Black,0);
   pen.setWidth(0);
   painter->setRenderHints(QPainter::Antialiasing, true);
-  const double scale= std::min(
+  const double scale= std::floor(std::min(
     (double)(boundingRect().width()) / (double)(Chip8Display::WIDTH),
-    (double)(boundingRect().height()) / (double) (Chip8Display::HEIGHT));
+    (double)(boundingRect().height()) / (double) (Chip8Display::HEIGHT)));
   for (int x = 0; x < Chip8Display::WIDTH; x++) {
     for (int y = 0; y < Chip8Display::HEIGHT; y++) {
+      const double x_f = x;
+      const double y_f = y;
       const auto& cur_pixel = m_ScreenPixels.at(x).at(y);
       pen.setColor(cur_pixel);
       painter->setPen(pen);
-      const QRectF pixel_pos((double)(x)*scale, (double)(y)*scale, scale, scale);
+      const QRectF pixel_pos(x_f*scale, y_f*scale, scale, scale);
       painter->fillRect(pixel_pos, cur_pixel);
     }
   }
