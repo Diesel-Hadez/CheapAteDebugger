@@ -48,7 +48,13 @@ target_compile_features(CheapAteDebugger_lib PUBLIC cxx_std_17)
 
 # ---- Declare executable ----
 
-add_executable(CheapAteDebugger_exe source/main.cpp source/resources.qrc)
+add_executable(CheapAteDebugger_exe 
+    source/main.cpp 
+    source/Chip8Backend.hpp
+    source/Chip8Backend.cpp
+    source/Chip8Display.hpp
+    source/Chip8Display.cpp
+    source/resources.qrc)
 add_executable(CheapAteDebugger::exe ALIAS CheapAteDebugger_exe)
 
 set_property(TARGET CheapAteDebugger_exe PROPERTY OUTPUT_NAME CheapAteDebugger)
