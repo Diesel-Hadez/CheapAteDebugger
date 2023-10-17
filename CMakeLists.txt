@@ -35,10 +35,10 @@ FetchContent_MakeAvailable(kddockwidgets)
 
 add_library(
     CheapAteDebugger_lib OBJECT
-    source/lib/Chip8Emulator.cpp
-    source/lib/CPU.cpp
-    source/lib/Memory.cpp
-    source/lib/Registers.cpp
+    source/lib/Chip8/Chip8Emulator.cpp
+    source/lib/Chip8/Chip8CPU.cpp
+    source/lib/Chip8/Chip8Memory.cpp
+    source/lib/Chip8/Chip8Registers.cpp
 )
 
 target_include_directories(

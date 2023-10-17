@@ -18,6 +18,9 @@ namespace C8{
     CPUPtr m_CPU;
     MemoryPtr m_Memory;
   public:
+    Registers* GetRegistersPtr() const {return m_Registers.get();}
+    Memory* GetMemoryPtr() const {return m_Memory.get();}
+  public:
     void Fetch() override;
     void Decode() override;
     void Execute() override;
