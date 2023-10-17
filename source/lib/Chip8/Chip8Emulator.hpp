@@ -1,7 +1,7 @@
 #ifndef CHIP8EMULATOR_H
 #define CHIP8EMULATOR_H
 #include <memory>
-#include <__Emulator.hpp>
+#include "../__Emulator.hpp"
 
 namespace C8{
   class Registers;
@@ -21,6 +21,8 @@ namespace C8{
     void Fetch() override;
     void Decode() override;
     void Execute() override;
+    void ClearScreen();
+    void DrawScreen(int vx, int vy, int height);
     Emulator(RegistersPtr, CPUPtr, MemoryPtr);
   };
 } // namespace C8

@@ -15,7 +15,7 @@
 
 #include "Chip8Display.hpp"
 #include "Chip8Backend.hpp"
-#include "Chip8Emulator.hpp"
+#include <Emulators.hpp>
 
 auto main(int argc, char* argv[]) -> int
 {
