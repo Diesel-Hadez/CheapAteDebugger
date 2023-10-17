@@ -35,13 +35,16 @@ FetchContent_MakeAvailable(kddockwidgets)
 
 add_library(
     CheapAteDebugger_lib OBJECT
-    source/lib.cpp
+    source/lib/Chip8Emulator.cpp
+    source/lib/CPU.cpp
+    source/lib/Memory.cpp
+    source/lib/Registers.cpp
 )
 
 target_include_directories(
     CheapAteDebugger_lib ${warning_guard}
     PUBLIC
-    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>"
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source/lib>"
 )
 
 target_compile_features(CheapAteDebugger_lib PUBLIC cxx_std_17)

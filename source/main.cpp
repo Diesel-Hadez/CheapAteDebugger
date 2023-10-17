@@ -15,13 +15,10 @@
 
 #include "Chip8Display.hpp"
 #include "Chip8Backend.hpp"
-#include "lib.hpp"
+#include "Chip8Emulator.hpp"
 
 auto main(int argc, char* argv[]) -> int
 {
-  auto const lib = library {};
-  auto const message = "Hello from " + lib.name + "!";
-  std::cout << message << '\n';
   #ifdef Q_OS_WIN
     QGuiApplication::setAttribute(Qt::AA_UseOpenGLES);
 #endif
