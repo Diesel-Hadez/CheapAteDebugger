@@ -1,5 +1,5 @@
-#ifndef __REGISTERS_H
-#define __REGISTERS_H
+#ifndef __REGISTERS_EMU_H
+#define __REGISTERS_EMU_H
 #include <unordered_map>
 template<typename RegisterKey, typename RegisterValue>
 class BaseRegisters {

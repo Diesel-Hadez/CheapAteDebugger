@@ -558,7 +558,10 @@ namespace C8::Actions {
         }
 
         void Execute() override {
-
+          auto x = m_Emulator.GetRegister(m_X);
+          auto y = m_Emulator.GetRegister(m_Y);
+          auto height = m_Value;
+          m_Emulator.DrawScreen(x, y, height);
         }
     };
 

@@ -1,5 +1,5 @@
-#ifndef __CPU_H
-#define __CPU_H
+#ifndef __CPU_EMU_H
+#define __CPU_EMU_H
 #include <memory>
 #include <type_traits>
 #include "__InstructionAction.hpp"

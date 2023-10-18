@@ -2,6 +2,7 @@
 #include "Chip8/Chip8Memory.hpp"
 #include "__CPU.hpp"
 #include "Actions.hpp"
+#include <iostream>
 
 C8::CPU::CPU(Emulator& emulator): m_Emulator(emulator){
 }
@@ -42,7 +43,7 @@ BaseInstructionActionPtr C8::CPU::Next() {
   const auto xnn= change_type(masked(0xF000), Opcode::ArgsType::XKK);
   const auto xyn= change_type(masked(0xF000), Opcode::ArgsType::XYN);
   const auto xy= change_type(masked(0xF00F), Opcode::ArgsType::XY);
-  const auto x = change_type(masked(0x0F00), Opcode::ArgsType::X);
+  const auto x = change_type(masked(0xF0FF), Opcode::ArgsType::X);
 
   #define CONST_CALL(action) ret = std::make_unique<action>(m_Emulator);
   #define NNN_CALL(action) ret = std::make_unique<action>(args.NNN, m_Emulator);
@@ -141,6 +142,7 @@ BaseInstructionActionPtr C8::CPU::Next() {
   }
   else if (xyn(0xD000))
   {
+    std::cout << "It's Drawing time" << std::endl;
     XYN_CALL(Actions::Draw)
   }
   else if (x(0xE09E))
@@ -173,6 +175,7 @@ BaseInstructionActionPtr C8::CPU::Next() {
   }
   else if (x(0xF029))
   {
+    std::cout << "LoadIRegister" << std::endl;
     X_CALL(Actions::LoadIRegister)
   }
   else if (x(0xF033))

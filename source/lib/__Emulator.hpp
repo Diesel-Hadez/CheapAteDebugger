@@ -1,5 +1,5 @@
-#ifndef __EMULATOR_H
-#define __EMULATOR_H
+#ifndef __EMULATOR_EMU_H
+#define __EMULATOR_EMU_H
 
 class BaseEmulator {
 public:
