@@ -44,44 +44,149 @@ BaseInstructionActionPtr C8::CPU::Next() {
   const auto xy= change_type(masked(0xF00F), Opcode::ArgsType::XY);
   const auto x = change_type(masked(0x0F00), Opcode::ArgsType::X);
 
+  #define CONST_CALL(action) ret = std::make_unique<action>(m_Emulator);
+  #define NNN_CALL(action) ret = std::make_unique<action>(args.NNN, m_Emulator);
+  #define XNN_CALL(action) ret = std::make_unique<action>(args.XKK.x, args.XKK.kk, m_Emulator);
+  #define XYN_CALL(action) ret = std::make_unique<action>(args.XYN.x, args.XYN.y, args.XYN.n, m_Emulator);
+  #define XY_CALL(action) ret = std::make_unique<action>(args.XY.x, args.XY.y, m_Emulator);
+  #define X_CALL(action) ret = std::make_unique<action>(args.X, m_Emulator);
 
-  if (constant(0x00E0)){
-    ret = std::make_unique<C8::Actions::DispClear>(m_Emulator);
+  if (constant(0x00E0))
+  {
+    CONST_CALL(Actions::ClearScreen)
   }
-  else if (constant(0x00EE)){}
-  else if (nnn(0x1000)){}
-  else if (nnn(0x2000)){}
-  else if (xnn(0x3000)){}
-  else if (xnn(0x4000)){}
-  else if (xy(0x5000)){}
-  else if (xnn(0x6000)){}
-  else if (xnn(0x7000)){}
-  else if (xy(0x8000)){}
-  else if (xy(0x8001)){}
-  else if (xy(0x8002)){}
-  else if (xy(0x8003)){}
-  else if (xy(0x8004)){}
-  else if (xy(0x8005)){}
-  else if (xy(0x8005)){}
-  else if (xy(0x8006)){}
-  else if (xy(0x8007)){}
-  else if (xy(0x800E)){}
-  else if (xy(0x9000)){}
-  else if (nnn(0xA000)){}
-  else if (nnn(0xB000)){}
-  else if (xnn(0xC000)){}
-  else if (xyn(0xD000)){}
-  else if (x(0xE09E)){}
-  else if (x(0xE0A1)){}
-  else if (x(0xF007)){}
-  else if (x(0xF00A)){}
-  else if (x(0xF015)){}
-  else if (x(0xF018)){}
-  else if (x(0xF01E)){}
-  else if (x(0xF029)){}
-  else if (x(0xF033)){}
-  else if (x(0xF055)){}
-  else if (x(0xF065)){}
+  else if (constant(0x00EE))
+  {
+    CONST_CALL(Actions::Ret)
+  }
+  else if (nnn(0x1000))
+  {
+    NNN_CALL(Actions::Jump)
+  }
+  else if (nnn(0x2000))
+  {
+    NNN_CALL(Actions::Call)
+  }
+  else if (xnn(0x3000))
+  {
+    XNN_CALL(Actions::SkipEqualImm)
+  }
+  else if (xnn(0x4000))
+  {
+    XNN_CALL(Actions::SkipNotEqualImm)
+  }
+  else if (xy(0x5000))
+  {
+    XY_CALL(Actions::SkipEqualReg)
+  }
+  else if (xnn(0x6000))
+  {
+    XNN_CALL(Actions::LoadRegImm)
+  }
+  else if (xnn(0x7000))
+  {
+    XNN_CALL(Actions::AddRegImm)
+  }
+  else if (xy(0x8000))
+  {
+    XY_CALL(Actions::Load)
+  }
+  else if (xy(0x8001))
+  {
+    XY_CALL(Actions::Or)
+  }
+  else if (xy(0x8002))
+  {
+    XY_CALL(Actions::And)
+  }
+  else if (xy(0x8003))
+  {
+    XY_CALL(Actions::Xor)
+  }
+  else if (xy(0x8004))
+  {
+    XY_CALL(Actions::Add)
+  }
+  else if (xy(0x8005))
+  {
+    XY_CALL(Actions::Subtract)
+  }
+  else if (xy(0x8006))
+  {
+    XY_CALL(Actions::ShiftRight)
+  }
+  else if (xy(0x8007))
+  {
+    XY_CALL(Actions::SubtractNoBorrow)
+  }
+  else if (xy(0x800E))
+  {
+    XY_CALL(Actions::ShiftLeft)
+  }
+  else if (xy(0x9000))
+  {
+    XY_CALL(Actions::SkipNotEqualReg)
+  }
+  else if (nnn(0xA000))
+  {
+    NNN_CALL(Actions::LoadIndirect)
+  }
+  else if (nnn(0xB000))
+  {
+    NNN_CALL(Actions::JumpIndirect)
+  }
+  else if (xnn(0xC000))
+  {
+    XNN_CALL(Actions::Random)
+  }
+  else if (xyn(0xD000))
+  {
+    XYN_CALL(Actions::Draw)
+  }
+  else if (x(0xE09E))
+  {
+    X_CALL(Actions::SkipNextIfKeyPressed)
+  }
+  else if (x(0xE0A1))
+  {
+    X_CALL(Actions::SkipNextIfKeyNotPressed)
+  }
+  else if (x(0xF007))
+  {
+    X_CALL(Actions::LoadDelayTimer)
+  }
+  else if (x(0xF00A))
+  {
+    X_CALL(Actions::WaitAndStoreKey)
+  }
+  else if (x(0xF015))
+  {
+    X_CALL(Actions::SetDelayTimer)
+  }
+  else if (x(0xF018))
+  {
+    X_CALL(Actions::SetSoundTimer)
+  }
+  else if (x(0xF01E))
+  {
+    X_CALL(Actions::AddIRegister)
+  }
+  else if (x(0xF029))
+  {
+    X_CALL(Actions::LoadIRegister)
+  }
+  else if (x(0xF033))
+  {
+    X_CALL(Actions::LoadBCDReg)
+  }
+  else if (x(0xF055))
+  {
+    X_CALL(Actions::StoreRegistersToI)
+  }
+  else if (x(0xF065))
+  {
+    X_CALL(Actions::LoadRegistersFromI)
+  }
   else {
     // Unknown Opcode
   }

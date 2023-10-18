@@ -1,6 +1,7 @@
 #ifndef CHIP8_ACTIONS_H
 #define CHIP8_ACTIONS_H
 #include "../__InstructionAction.hpp"
+#include "Chip8/Chip8Memory.hpp"
 #include "Chip8/Chip8Registers.hpp"
 #include "Chip8Emulator.hpp"
 
@@ -71,32 +72,550 @@ namespace C8::Opcode {
 } // namespace C8::Opcode
 
 namespace C8::Actions {
-  class DispClear: public BaseInstructionAction {
-  private:
-    C8::Emulator& m_Emulator;
-  public:
-    explicit DispClear(C8::Emulator& emulator) :
-    m_Emulator(emulator)
-    {
-    
-    }
-    void Execute() override {
-      m_Emulator.ClearScreen();
-    }
-  };
 
-  class LoadRegister: public BaseInstructionAction {
-  private:
-    C8::Emulator& m_Emulator;
-  public:
-    explicit LoadRegister(C8::Emulator& emulator) :
-    m_Emulator(emulator)
-    {
-    
-    }
-    void Execute() override {
-    }
+    class ClearScreen: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        explicit ClearScreen(C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
 
-  };
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Ret: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        explicit Ret(C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Jump: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        Jump(C8::MemoryRegister addr, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Call: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        Call(C8::MemoryRegister addr, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class SkipEqualImm: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        SkipEqualImm(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class SkipNotEqualImm: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        SkipNotEqualImm(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class SkipEqualReg: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        SkipEqualReg(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class LoadRegImm: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        LoadRegImm(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class AddRegImm: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        AddRegImm(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Load: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        Load(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Or: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        Or(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class And: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        And(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Xor: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        Xor(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Add: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        Add(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Subtract: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        Subtract(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class ShiftRight: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        ShiftRight(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class SubtractNoBorrow: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        SubtractNoBorrow(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class ShiftLeft: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        ShiftLeft(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class SkipNotEqualReg: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        SkipNotEqualReg(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class LoadIndirect: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        LoadIndirect(C8::MemoryRegister addr, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class JumpIndirect: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        JumpIndirect(C8::MemoryRegister addr, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Random: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        Random(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class Draw: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        Draw(C8::Register x, C8::Register y, C8::MemoryValue value, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class SkipNextIfKeyPressed: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        SkipNextIfKeyPressed(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class SkipNextIfKeyNotPressed: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        SkipNextIfKeyNotPressed(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class LoadDelayTimer: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        LoadDelayTimer(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class WaitAndStoreKey: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        WaitAndStoreKey(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class SetDelayTimer: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        SetDelayTimer(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class SetSoundTimer: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        SetSoundTimer(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class AddIRegister: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        AddIRegister(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class LoadIRegister: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        LoadIRegister(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class LoadBCDReg: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        LoadBCDReg(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class StoreRegistersToI: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        StoreRegistersToI(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
+    class LoadRegistersFromI: public BaseInstructionAction {
+    private:
+        C8::Emulator& m_Emulator;
+    public:
+        LoadRegistersFromI(C8::Register x, C8::Emulator& emulator) : 
+        m_Emulator(emulator) {
+
+        }
+
+        void Execute() override {
+
+        }
+    };
+
+    
+
 }
 #endif
