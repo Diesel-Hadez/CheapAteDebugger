@@ -9,18 +9,20 @@ namespace C8{
   class Registers;
   class CPU;
   class Memory;
+  namespace Actions {
+    class BaseChip8InstructionAction;
+  }
 
   using RegistersPtr=std::unique_ptr<Registers>;
   using CPUPtr=std::unique_ptr<CPU>;
   using MemoryPtr=std::unique_ptr<Memory>;
+  using BaseChip8InstructionActionPtr=std::unique_ptr<Actions::BaseChip8InstructionAction>;
 
   class Emulator: BaseEmulator {
   private:
     RegistersPtr m_Registers;
     CPUPtr m_CPU;
     MemoryPtr m_Memory;
-
-    BaseInstructionActionPtr m_LastAction;
 
     bool m_Paused;
     bool m_Running;

@@ -32,9 +32,8 @@ void C8::Emulator::Execute() {
 }
 
 void C8::Emulator::StepPC() {
-  constexpr int BYTES_PER_OPCODE = 2;
   auto cur_pc = m_Registers->GetProgramCounter();
-  m_Registers->SetProgramCounter(cur_pc + BYTES_PER_OPCODE);
+  m_Registers->SetProgramCounter(cur_pc + m_LastAction->m_StepCount);
 }
 
 C8::RegisterValue C8::Emulator::GetRegister(C8::Register r) {

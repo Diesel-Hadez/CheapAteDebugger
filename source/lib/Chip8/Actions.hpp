@@ -3,7 +3,7 @@
 #include "../__InstructionAction.hpp"
 #include "Chip8/Chip8Memory.hpp"
 #include "Chip8/Chip8Registers.hpp"
-#include "Chip8Emulator.hpp"
+
 
 namespace C8::Opcode {
   enum class ArgsType {
@@ -73,91 +73,102 @@ namespace C8::Opcode {
 
 namespace C8::Actions {
 
-
-    class ClearScreen: public BaseInstructionAction {
-    private:
+    class BaseChip8InstructionAction: public BaseInstructionAction {
+    protected:
         C8::Emulator& m_Emulator;
+        constexpr static int OPCODE_SIZE = 2;
         
+    public:
+        explicit BaseChip8InstructionAction(C8::Emulator& emulator) : 
+        m_Emulator(emulator)
+        {
+            m_StepCount = OPCODE_SIZE;
+
+        }
+
+        virtual void Execute()=0; 
+      virtual ~BaseChip8InstructionAction(){}
+    };
+
+    class ClearScreen: public BaseChip8InstructionAction {
+            
     public:
         explicit ClearScreen(C8::Emulator& emulator) : 
-        m_Emulator(emulator) {
+        BaseChip8InstructionAction(emulator) {
 
         }
 
         void Execute() override {
-
+          m_Emulator.ClearScreen();
         }
     };
 
     
 
-    class Ret: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Ret: public BaseChip8InstructionAction {
+            
     public:
         explicit Ret(C8::Emulator& emulator) : 
-        m_Emulator(emulator) {
+        BaseChip8InstructionAction(emulator) {
 
         }
 
         void Execute() override {
-
+            auto ret = m_Emulator.GetMemoryPtr()->PopStack();
+            m_Emulator.GetRegistersPtr()->SetProgramCounter(ret);
         }
     };
 
     
 
-    class Jump: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Jump: public BaseChip8InstructionAction {
+            
         C8::MemoryRegister m_Addr;
 
     public:
         Jump(C8::MemoryRegister addr, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_Addr(addr) {
 
         }
 
         void Execute() override {
-
+            // Prevent stepping over this instruction
+            // since we're directly modifying the program counter
+            m_StepCount = 0;
+            m_Emulator.GetRegistersPtr()->SetProgramCounter(m_Addr);
         }
     };
 
     
 
-    class Call: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Call: public BaseChip8InstructionAction {
+            
         C8::MemoryRegister m_Addr;
 
     public:
         Call(C8::MemoryRegister addr, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_Addr(addr) {
 
         }
 
         void Execute() override {
-
+            m_Emulator.GetMemoryPtr()->PushStack(m_Emulator.GetRegistersPtr()->GetProgramCounter()+OPCODE_SIZE); 
+            m_Emulator.GetRegistersPtr()->SetProgramCounter(m_Addr);
         }
     };
 
     
 
-    class SkipEqualImm: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class SkipEqualImm: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::MemoryValue m_Value;
 
     public:
         SkipEqualImm(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Value(value) {
 
@@ -170,16 +181,14 @@ namespace C8::Actions {
 
     
 
-    class SkipNotEqualImm: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class SkipNotEqualImm: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::MemoryValue m_Value;
 
     public:
         SkipNotEqualImm(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Value(value) {
 
@@ -192,16 +201,14 @@ namespace C8::Actions {
 
     
 
-    class SkipEqualReg: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class SkipEqualReg: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         SkipEqualReg(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -214,16 +221,14 @@ namespace C8::Actions {
 
     
 
-    class LoadRegImm: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class LoadRegImm: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::MemoryValue m_Value;
 
     public:
         LoadRegImm(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Value(value) {
 
@@ -236,16 +241,14 @@ namespace C8::Actions {
 
     
 
-    class AddRegImm: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class AddRegImm: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::MemoryValue m_Value;
 
     public:
         AddRegImm(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Value(value) {
 
@@ -258,16 +261,14 @@ namespace C8::Actions {
 
     
 
-    class Load: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Load: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         Load(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -280,16 +281,14 @@ namespace C8::Actions {
 
     
 
-    class Or: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Or: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         Or(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -302,16 +301,14 @@ namespace C8::Actions {
 
     
 
-    class And: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class And: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         And(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -324,16 +321,14 @@ namespace C8::Actions {
 
     
 
-    class Xor: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Xor: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         Xor(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -346,16 +341,14 @@ namespace C8::Actions {
 
     
 
-    class Add: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Add: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         Add(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -368,16 +361,14 @@ namespace C8::Actions {
 
     
 
-    class Subtract: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Subtract: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         Subtract(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -390,16 +381,14 @@ namespace C8::Actions {
 
     
 
-    class ShiftRight: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class ShiftRight: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         ShiftRight(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -412,16 +401,14 @@ namespace C8::Actions {
 
     
 
-    class SubtractNoBorrow: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class SubtractNoBorrow: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         SubtractNoBorrow(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -434,16 +421,14 @@ namespace C8::Actions {
 
     
 
-    class ShiftLeft: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class ShiftLeft: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         ShiftLeft(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -456,16 +441,14 @@ namespace C8::Actions {
 
     
 
-    class SkipNotEqualReg: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class SkipNotEqualReg: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
 
     public:
         SkipNotEqualReg(C8::Register x, C8::Register y, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y) {
 
@@ -478,15 +461,13 @@ namespace C8::Actions {
 
     
 
-    class LoadIndirect: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class LoadIndirect: public BaseChip8InstructionAction {
+            
         C8::MemoryRegister m_Addr;
 
     public:
         LoadIndirect(C8::MemoryRegister addr, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_Addr(addr) {
 
         }
@@ -498,15 +479,13 @@ namespace C8::Actions {
 
     
 
-    class JumpIndirect: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class JumpIndirect: public BaseChip8InstructionAction {
+            
         C8::MemoryRegister m_Addr;
 
     public:
         JumpIndirect(C8::MemoryRegister addr, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_Addr(addr) {
 
         }
@@ -518,16 +497,14 @@ namespace C8::Actions {
 
     
 
-    class Random: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Random: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::MemoryValue m_Value;
 
     public:
         Random(C8::Register x, C8::MemoryValue value, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Value(value) {
 
@@ -540,17 +517,15 @@ namespace C8::Actions {
 
     
 
-    class Draw: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class Draw: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
         C8::Register m_Y;
         C8::MemoryValue m_Value;
 
     public:
         Draw(C8::Register x, C8::Register y, C8::MemoryValue value, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x),
         m_Y(y),
         m_Value(value) {
@@ -567,15 +542,13 @@ namespace C8::Actions {
 
     
 
-    class SkipNextIfKeyPressed: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class SkipNextIfKeyPressed: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         SkipNextIfKeyPressed(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -587,15 +560,13 @@ namespace C8::Actions {
 
     
 
-    class SkipNextIfKeyNotPressed: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class SkipNextIfKeyNotPressed: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         SkipNextIfKeyNotPressed(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -607,15 +578,13 @@ namespace C8::Actions {
 
     
 
-    class LoadDelayTimer: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class LoadDelayTimer: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         LoadDelayTimer(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -627,15 +596,13 @@ namespace C8::Actions {
 
     
 
-    class WaitAndStoreKey: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class WaitAndStoreKey: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         WaitAndStoreKey(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -647,15 +614,13 @@ namespace C8::Actions {
 
     
 
-    class SetDelayTimer: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class SetDelayTimer: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         SetDelayTimer(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -667,15 +632,13 @@ namespace C8::Actions {
 
     
 
-    class SetSoundTimer: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class SetSoundTimer: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         SetSoundTimer(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -687,15 +650,13 @@ namespace C8::Actions {
 
     
 
-    class AddIRegister: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class AddIRegister: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         AddIRegister(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -707,15 +668,13 @@ namespace C8::Actions {
 
     
 
-    class LoadIRegister: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class LoadIRegister: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         LoadIRegister(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -727,15 +686,13 @@ namespace C8::Actions {
 
     
 
-    class LoadBCDReg: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class LoadBCDReg: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         LoadBCDReg(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -747,15 +704,13 @@ namespace C8::Actions {
 
     
 
-    class StoreRegistersToI: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class StoreRegistersToI: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         StoreRegistersToI(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
@@ -767,15 +722,13 @@ namespace C8::Actions {
 
     
 
-    class LoadRegistersFromI: public BaseInstructionAction {
-    private:
-        C8::Emulator& m_Emulator;
-        
+    class LoadRegistersFromI: public BaseChip8InstructionAction {
+            
         C8::Register m_X;
 
     public:
         LoadRegistersFromI(C8::Register x, C8::Emulator& emulator) : 
-        m_Emulator(emulator),
+        BaseChip8InstructionAction(emulator),
         m_X(x) {
 
         }
