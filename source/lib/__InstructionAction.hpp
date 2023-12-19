@@ -4,9 +4,8 @@
 class BaseInstructionAction {
 public:
   int m_StepCount;
-  
-public:
-  virtual void Execute()=0;
+
+  virtual void Execute() = 0;
   virtual ~BaseInstructionAction() = default;
 };
 

@@ -46,7 +46,7 @@ BraceWrapping:
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
 BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Custom
+BreakBeforeBraces: Attach
 # BreakBeforeInheritanceComma: true
 BreakInheritanceList: BeforeComma
 BreakBeforeTernaryOperators: true
@@ -97,7 +97,7 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 MacroBlockBegin: ''
 MacroBlockEnd: ''
 MaxEmptyLinesToKeep: 1
-NamespaceIndentation: None
+NamespaceIndentation: All
 ObjCBinPackProtocolList: Never
 ObjCBlockIndentWidth: 2
 ObjCBreakBeforeNestedBlockParam: true

@@ -1,14 +1,15 @@
-#include "Chip8Display.hpp"
-#include <qcolor.h>
-#include <qpainter.h>
-
 #include <cmath>
 #include <utility>
 
+#include "Chip8Display.hpp"
+
+#include <qcolor.h>
+#include <qpainter.h>
+
 Chip8Display::Chip8Display(QQuickItem* parent)
-  : QQuickPaintedItem(parent),
-    m_RefreshRate(this),
-    m_PenColor(QColor::fromRgb(255,0,0)){
+    : QQuickPaintedItem(parent)
+    , m_PenColor(QColor::fromRgb(255, 0, 0))
+    , m_RefreshRate(this) {
   using namespace std::chrono_literals;
   // Roughly 30 frames per second
   m_RefreshRate.setInterval(33ms);
@@ -34,20 +35,23 @@ void Chip8Display::SetPixel(int x, int y, QColor color) {
   m_RenderMutex.unlock();
 }
 
-void Chip8Display::paint(QPainter* painter)  {
+void Chip8Display::paint(QPainter* painter) {
   m_RenderMutex.lock();
-  QPen pen(QColorConstants::Black,0);
+  QPen pen(QColorConstants::Black, 0);
   pen.setWidth(0);
   painter->setRenderHints(QPainter::Antialiasing, true);
-  const double minScale= std::min(
-    (double)(boundingRect().width()) / (double)(Chip8Display::WIDTH),
-    (double)(boundingRect().height()) / (double) (Chip8Display::HEIGHT));
-  double integral;
-  const double leftover= std::modf(minScale, &integral);
+  const double min_scale =
+      std::min(static_cast<double>(boundingRect().width())
+                   / static_cast<double>(Chip8Display::WIDTH),
+               static_cast<double>(boundingRect().height())
+                   / static_cast<double>(Chip8Display::HEIGHT));
+  double integral = NAN;
+  const double leftover = std::modf(min_scale, &integral);
   // Increase to add a border to
   // avoid artifacts in fractional scaling
-  const double left_margin = std::floor((leftover * (double)Chip8Display::WIDTH) / 2.F);
-  const double scale = std::floor(minScale);
+  const double left_margin =
+      std::floor((leftover * static_cast<double>(Chip8Display::WIDTH)) / 2.F);
+  const double scale = std::floor(min_scale);
   for (int x = 0; x < Chip8Display::WIDTH; x++) {
     for (int y = 0; y < Chip8Display::HEIGHT; y++) {
       const double x_f = x;
@@ -55,7 +59,8 @@ void Chip8Display::paint(QPainter* painter)  {
       const auto& cur_pixel = m_ScreenPixels.at(x).at(y);
       pen.setColor(cur_pixel);
       painter->setPen(pen);
-      const QRectF pixel_pos(left_margin+(x_f*scale), y_f*scale, scale, scale);
+      const QRectF pixel_pos(
+          left_margin + (x_f * scale), y_f * scale, scale, scale);
       painter->fillRect(pixel_pos, cur_pixel);
     }
   }
