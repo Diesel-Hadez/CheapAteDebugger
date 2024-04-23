@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 
-#include <Emulators.hpp>
 #include <kddockwidgets/Config.h>
 #include <kddockwidgets/core/DockRegistry.h>
 #include <kddockwidgets/qtquick/Platform.h>
