@@ -11,7 +11,7 @@ namespace C8 {
   class Memory;
   namespace Actions {
     class BaseChip8InstructionAction;
-  } // namespace Actions
+  }  // namespace Actions
 
   using RegistersPtr = std::unique_ptr<Registers>;
   using CPUPtr = std::unique_ptr<CPU>;
@@ -42,7 +42,7 @@ namespace C8 {
     void ClearScreen();
     void DrawScreen(int vx, int vy, int height);
     Emulator(RegistersPtr, CPUPtr, MemoryPtr);
-    ~Emulator() override =default;
+    ~Emulator() override = default;
   };
 }  // namespace C8
 #endif

@@ -9,7 +9,7 @@ namespace C8 {
   class CPU : public BaseCPU {
   private:
     // clang-tidy doesn't like this being a reference for some reason?
-    // NOLINTNEXTLINE 
+    // NOLINTNEXTLINE
     Emulator& m_Emulator;
 
   public:

@@ -39,8 +39,12 @@ namespace C8 {
     void SetProgramCounter(RegisterValue val) { m_ProgramCounter = val; }
     auto GetProgramCounter() const -> RegisterValue { return m_ProgramCounter; }
     void SetVRegister(Register r, RegisterValue v) { m_Registers.at(r) = v; }
-    auto GetVRegister(Register r) const -> RegisterValue { return m_Registers.at(r); }
-    auto GetAddressRegister() const -> MemoryRegister { return m_AddressRegister; }
+    auto GetVRegister(Register r) const -> RegisterValue {
+      return m_Registers.at(r);
+    }
+    auto GetAddressRegister() const -> MemoryRegister {
+      return m_AddressRegister;
+    }
     void SetAddressRegister(MemoryRegister value) { m_AddressRegister = value; }
     Registers()
         : m_AddressRegister(0)
