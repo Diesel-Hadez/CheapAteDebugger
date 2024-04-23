@@ -1,0 +1,6 @@
+[book]
+authors = ["Diesel-Hadez"]
+language = "en"
+multilingual = false
+src = "src"
+title = "CheapAteDebugger Developer Documentation"
