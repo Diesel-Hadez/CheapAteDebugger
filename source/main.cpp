@@ -14,6 +14,19 @@
 #include "Chip8Backend.hpp"
 #include "Chip8Display.hpp"
 
+class CustomViewFactory : public KDDockWidgets::QtQuick::ViewFactory
+{
+public:
+    QUrl titleBarFilename() const override
+    {
+        return QUrl("qrc:/MyTitleBar.qml");
+    }
+    QUrl separatorFilename() const override
+    {
+        return QUrl("qrc:/MySeparator.qml");
+    }
+};
+
 auto main(int argc, char* argv[]) -> int {
 #ifdef Q_OS_WIN
   QGuiApplication::setAttribute(Qt::AA_UseOpenGLES);
@@ -27,6 +40,7 @@ auto main(int argc, char* argv[]) -> int {
   auto flags = config.flags() | KDDockWidgets::Config::Flag_TitleBarIsFocusable;
 
   config.setFlags(flags);
+  config.setViewFactory(new CustomViewFactory());
 
   QQmlApplicationEngine appEngine;
   KDDockWidgets::QtQuick::Platform::instance()->setQmlEngine(&appEngine);

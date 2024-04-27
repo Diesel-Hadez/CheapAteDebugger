@@ -6,11 +6,16 @@ import my.b1te.cheapate 1.0
 Item {
   property alias chip8Display:  __chip8Display
   id: root
+  SystemPalette {id: sysPalette}
   KDDW.DockWidget {
     id: emulatedScreenDock
     uniqueName: "emulatedScreenDock"
     Item {
       anchors.fill: parent
+      Rectangle {
+        anchors.fill: parent
+        color: sysPalette.window
+      }
       Chip8Display {
         id: __chip8Display
         anchors {

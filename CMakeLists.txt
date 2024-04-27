@@ -27,7 +27,7 @@ include(FetchContent)
 FetchContent_Declare(
   kddockwidgets
   GIT_REPOSITORY https://github.com/KDAB/KDDockWidgets.git
-  GIT_TAG        db43dbdc9d8f47022ed1e57e53948eb84ccee2b6 # 2.0
+  GIT_TAG        4fd9f51fb2fa14aa92a97def27f8ec99d64a534f# 2.1
 )
 FetchContent_MakeAvailable(kddockwidgets)
 

@@ -3,10 +3,12 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import com.kdab.dockwidgets 2.0 as KDDW
 
+
 Item {
   id: root
   signal isFocusedChanged()
   property alias program_counter: disassemblyLv.currentIndex
+  SystemPalette {id: sysPalette}
 
   ListModel {
     id: mockDisassemblyCode
@@ -43,10 +45,12 @@ Item {
       id: rl
       Text {
         text: "0x" + address.toString(16).toUpperCase()
+        color: sysPalette.text
         font.pixelSize: 12
       }
       Text {
         text: code
+        color: sysPalette.text
         font.pixelSize: 18
       }
     }
@@ -58,6 +62,10 @@ Item {
     Item {
       id: disassemblyItem
       anchors.fill: parent
+      Rectangle {
+        anchors.fill: parent
+        color: sysPalette.window
+      }
       ListView {
         id: disassemblyLv
         clip: true
@@ -74,7 +82,7 @@ Item {
             left: parent.left
             right: parent.right
           }
-          color: "lightgray"
+          color: sysPalette.highlight
         }
         delegate: assemblyLineDelegate
       }

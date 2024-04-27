@@ -4,5 +4,7 @@
         <file>DisassemblyDock.qml</file>
         <file>CommandInputDock.qml</file>
         <file>EmulatedScreenDock.qml</file>
+	<file>MyTitleBar.qml</file>
+	<file>MySeparator.qml</file>
     </qresource>
 </RCC>

@@ -1,9 +1,12 @@
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Styles 1.4
 import com.kdab.dockwidgets 2.0 as KDDW
 
 Item {
   id: root
+
+  SystemPalette {id: sysPalette}
   // TO-DO: Maybe do parsing here instead,
   // then the arguments for this signal can be
   // something like 
@@ -17,8 +20,8 @@ Item {
       visible: true
       anchors.fill: parent
       Rectangle {
-        color: "red"
         anchors.fill: parent
+        color: sysPalette.window
       }
       ScrollView {
         id: commandOutputScrollView
@@ -38,13 +41,8 @@ Item {
           selectByMouse: true
           font.family: "FiraCode Nerd Font"
           readOnly: true
-          background: Rectangle {
-            color: "white"
-            border.color: commandOutputView.enabled 
-            ? "#21be2b" : "transparent"
-          }
           placeholderText: "Command Outputs will be shown here"
-        }
+          }
       }
       TextField {
         id: commandInputView
